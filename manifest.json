@@ -1,0 +1,43 @@
+{
+  "name": "Cookie Spy",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "This extension is to find when and where a cookie to be born",
+  "homepage_url": "https://chaoyang.nz",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "permissions": [
+    "cookies",
+    "webRequest",
+    "activeTab",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "run_at":"document_start",
+      "all_frames": true,
+      "js": [
+        "src/inject/inject.js"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "src/bg/background.js"
+    ],
+    "persistent": true
+  },
+  "web_accessible_resources": [
+    "js/*",
+    "css/*",
+    "icons/*"
+  ]
+}
