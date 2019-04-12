@@ -1,4 +1,4 @@
-# cookie-spy
+# cookie-collector
 
 ## install
 
