@@ -10,9 +10,10 @@ const parseCookie = function(cookie) {
 		}
 	}, {})
 
-	const name = Object.keys(c).filter((name) => !['domain', 'path', 'max-age', 'expires', 'secure', 'samesite'].includes(name))[0];
+	const name = Object.keys(c).filter((name) => !['domain', 'path', 'max-age', 'expires', 'secure', 'samesite', 'http-only'].includes(name))[0];
 	const value = c[name]
 	delete c[name]
+	delete c['']
 	return {
 		...c,
 		name,
@@ -20,18 +21,22 @@ const parseCookie = function(cookie) {
 	}
 }
 
-function consoleLog(...args) {
-	const frame = StackTrace.getSync()[4]
-	console.warn.apply(console, ['🍪', ...args, '[', `${frame.functionName}@${frame.fileName}:${frame.lineNumber}`, ']'])
-}
+// const background = chrome.extension.getBackgroundPage()
 
 const cookie_setter = document.__lookupSetter__('cookie').bind(document);
 const cookie_getter = document.__lookupGetter__('cookie').bind(document);
 
 Object.defineProperty(document, 'cookie', { 
 	set: function(value) {
+		const frame = StackTrace.getSync()[3];
+		const trace = `${frame.functionName}@${frame.fileName}:${frame.lineNumber}`
+
+		let entry = {
+			cookie: value,
+			trace
+		}
+
 		const title = document.querySelector('title')
-		let entry = parseCookie(value)
 		if(title && title.textContent === 'Latest breaking news NZ | Stuff.co.nz') {
 			entry = Object.assign({
 				firstParty: true,
@@ -43,7 +48,18 @@ Object.defineProperty(document, 'cookie', {
 				context: document.URL
 			}, entry)
 		}
-		consoleLog(entry)
+
+		fetch('http://localhost:9000?type=client', {
+			method: 'POST',
+			body: JSON.stringify(entry), // data can be `string` or {object}!
+			headers:{
+				'Content-Type': 'application/json'
+			}
+		}).then((res) => {
+			console.log('🍪', entry)
+		}).catch((error) => {
+			console.error('🍪', error)
+		})
 		cookie_setter(value)
 	},
 	get: function() {

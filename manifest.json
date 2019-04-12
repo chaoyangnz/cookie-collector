@@ -1,8 +1,8 @@
 {
-  "name": "Cookie Spy",
+  "name": "Cookie Collector",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "This extension is to find when and where a cookie to be born",
+  "description": "This extension is to collect when and where a cookie to be born",
   "homepage_url": "https://chaoyang.nz",
   "icons": {
     "16": "icons/icon16.png",
