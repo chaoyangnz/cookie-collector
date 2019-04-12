@@ -13,7 +13,9 @@
   "permissions": [
     "cookies",
     "webRequest",
+    "webRequestBlocking",
     "activeTab",
+    "http://*/*",
     "https://*/*"
   ],
   "content_scripts": [

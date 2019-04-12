@@ -22,7 +22,25 @@ chrome.webRequest.onCompleted.addListener(function(res) {
   })
 }, {
   urls: [
-      '*://*/*'
-  ]
+      '*://*/*',
+  ],
+  types: ["main_frame", "sub_frame"]
 },
 ['responseHeaders', 'extraHeaders']);
+
+
+// disable CSP
+chrome.webRequest.onHeadersReceived.addListener(function(details) {
+  for (var i = 0; i < details.responseHeaders.length; i++) {
+    if ('content-security-policy' === details.responseHeaders[i].name.toLowerCase()) {
+      details.responseHeaders[i].value = '';
+    }
+  }
+
+  return {
+    responseHeaders: details.responseHeaders
+  };
+}, {
+  urls: ["*://*/*"],
+  types: ["main_frame", "sub_frame"]
+}, ["blocking", "responseHeaders"]);
