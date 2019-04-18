@@ -1,6 +1,6 @@
 # cookie-collector
 
-This is an Chrome Extension to collect where a client-side cookie is born: context(top frame or iframe), script(call function, js file, line number) and which response set HTTP cookies.
+This is a Chrome Extension to collect where a client-side cookie is born: context(top frame or iframe), script(call function, js file, line number) and which response set HTTP cookies.
 
 These data is useful to audit the website cookie usage so that the risk can be aware due to the new release of Safari ITP 2.1 which enforces some restrictions on client-side cookies.
 
